@@ -6,8 +6,15 @@ from appium.webdriver.webdriver import WebDriver
 
 from baidu_aip_test import cordinate
 
+StepSleepDuration = 3
 
-def screenCordinateStep(driver: WebDriver, text):
+
+def stepCordinate(driver: WebDriver, x: int, y: int):
+    TouchAction(driver=driver).tap(x=x, y=y).release().perform()
+    _stepHoldOn()
+
+
+def stepTextInScreen(driver: WebDriver, text):
     data = driver.get_screenshot_as_png()
     point = cordinate(text, data)
     if not point:
@@ -15,7 +22,17 @@ def screenCordinateStep(driver: WebDriver, text):
         return
     TouchAction(driver=driver).tap(
         x=point['x'], y=point['y']).release().perform()
-    sleep(3)
+    _stepHoldOn()
+
+
+def stepAccessibilityId(driver: WebDriver, id):
+    element = driver.find_element(by=AppiumBy.ACCESSIBILITY_ID, value=id)
+    element.click()
+    _stepHoldOn()
+
+
+def _stepHoldOn():
+    sleep(StepSleepDuration)
 
 
 def main():
@@ -29,17 +46,19 @@ def main():
 
     driver = webdriver.Remote("http://127.0.0.1:4723/wd/hub", caps)
 
-    driver.implicitly_wait(3)
     # element = driver.find_element(by=AppiumBy.ACCESSIBILITY_ID, value="任务中心")
     # element.click()
 
-    # driver.implicitly_wait(3)
+    # _stepHoldOn()
     # element = driver.find_element(by=AppiumBy.ACCESSIBILITY_ID, value="历史任务")
     # element.click()
 
-    screenCordinateStep(driver=driver, text='任务中心')
-    screenCordinateStep(driver=driver, text='去完成')
-    screenCordinateStep(driver=driver, text='审核通过')
+    # stepTextInScreen(driver=driver, text='任务中心')
+    # stepTextInScreen(driver=driver, text='去完成')
+    # stepTextInScreen(driver=driver, text='审核通过')
+
+    stepAccessibilityId(driver=driver, id="任务中心")
+    stepCordinate(driver=driver, x=20, y=90)
 
     driver.quit()
 
