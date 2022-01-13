@@ -7,6 +7,9 @@ from appium.webdriver.webdriver import WebDriver
 from baidu_aip_test import cordinate
 
 StepSleepDuration = 3
+AppBarBackXIphone = 20
+AppBarBackYIphoneRegular = 40
+AppBarBackYIphoneNotRegular = 90
 
 
 def stepCordinate(driver: WebDriver, x: int, y: int):
@@ -29,6 +32,11 @@ def stepAccessibilityId(driver: WebDriver, id):
     element = driver.find_element(by=AppiumBy.ACCESSIBILITY_ID, value=id)
     element.click()
     _stepHoldOn()
+
+
+def stepBack(driver: WebDriver):
+    stepCordinate(driver=driver, x=AppBarBackXIphone,
+                  y=AppBarBackYIphoneNotRegular)
 
 
 def _stepHoldOn():
@@ -58,7 +66,7 @@ def main():
     # stepTextInScreen(driver=driver, text='审核通过')
 
     stepAccessibilityId(driver=driver, id="任务中心")
-    stepCordinate(driver=driver, x=20, y=90)
+    stepBack(driver=driver)
 
     driver.quit()
 
