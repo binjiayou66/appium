@@ -12,52 +12,55 @@ AppBarBackYIphoneRegular = 40
 AppBarBackYIphoneNotRegular = 90
 
 
-def stepCordinate(driver: WebDriver, x: int, y: int):
-    TouchAction(driver=driver).tap(x=x, y=y).release().perform()
-    _stepHoldOn()
+class AutoTest:
+    driver: WebDriver
 
+    def __init__(self):
+        caps = {}
+        caps["platformName"] = "ios"
+        caps["bundleId"] = "com.kangmeng.zstyd"
+        caps["automationName"] = "xcuitest"
+        caps["deviceName"] = "iPhone 13"
+        caps["platformVersion"] = "15.0"
+        caps["noReset"] = True
+        self.driver = webdriver.Remote("http://127.0.0.1:4723/wd/hub", caps)
 
-def stepAccessibilityId(driver: WebDriver, id):
-    element = driver.find_element(by=AppiumBy.ACCESSIBILITY_ID, value=id)
-    element.click()
-    _stepHoldOn()
+    def _stepHoldOn(self):
+        sleep(StepSleepDuration)
 
+    def stepCordinate(self, x: int, y: int):
+        TouchAction(driver=self.driver).tap(x=x, y=y).release().perform()
+        self._stepHoldOn()
 
-def stepTextInScreen(driver: WebDriver, text):
-    data = driver.get_screenshot_as_png()
-    point = cordinate(text, data)
-    if not point:
-        print('未找到元素')
-        return
-    stepCordinate(driver=driver, x=point['x'], y=point['y'])
+    def stepAccessibilityId(self, id):
+        element = self.driver.find_element(
+            by=AppiumBy.ACCESSIBILITY_ID, value=id)
+        element.click()
+        self._stepHoldOn()
 
+    def stepTextInScreen(self, text):
+        data = self.driver.get_screenshot_as_png()
+        point = cordinate(text, data)
+        if not point:
+            print('未找到元素')
+            return
+        self.stepCordinate(x=point['x'], y=point['y'])
 
-def stepBack(driver: WebDriver):
-    stepCordinate(driver=driver, x=AppBarBackXIphone,
-                  y=AppBarBackYIphoneNotRegular)
+    def stepBack(self):
+        self.stepCordinate(x=AppBarBackXIphone,
+                           y=AppBarBackYIphoneNotRegular)
 
-
-def _stepHoldOn():
-    sleep(StepSleepDuration)
+    def __del__(self):
+        self.driver.quit()
 
 
 def main():
-    caps = {}
-    caps["platformName"] = "ios"
-    caps["bundleId"] = "com.kangmeng.zstyd"
-    caps["automationName"] = "xcuitest"
-    caps["deviceName"] = "iPhone 13"
-    caps["platformVersion"] = "15.0"
-    caps["noReset"] = True
+    auto = AutoTest()
 
-    driver = webdriver.Remote("http://127.0.0.1:4723/wd/hub", caps)
-
-    stepTextInScreen(driver=driver, text='任务中心')
-    stepTextInScreen(driver=driver, text='去完成')
-    stepTextInScreen(driver=driver, text='审核通过')
-    stepBack(driver=driver)
-
-    driver.quit()
+    auto.stepTextInScreen('任务中心')
+    auto.stepTextInScreen('去完成')
+    auto.stepTextInScreen('审核通过')
+    auto.stepBack()
 
 
 if __name__ == "__main__":
