@@ -6,8 +6,8 @@ def main():
     auto = AutoTest()
 
     auto.stepTextInScreen('任务中心')
-    auto.stepTextInScreen('去完成')
-    auto.stepTextInScreen('审核通过')
+    # auto.stepTextInScreen('Get X')
+    # auto.stepTextInScreen('审核通过')
     auto.stepBack()
 
 

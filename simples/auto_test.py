@@ -16,12 +16,20 @@ class AutoTest:
     driver: WebDriver
 
     def __init__(self):
+        # caps = {}
+        # caps["platformName"] = "ios"
+        # caps["bundleId"] = "com.kangmeng.zstyd"
+        # caps["automationName"] = "xcuitest"
+        # caps["deviceName"] = "iPhone 13"
+        # caps["platformVersion"] = "15.0"
+        # caps["noReset"] = True
         caps = {}
-        caps["platformName"] = "ios"
-        caps["bundleId"] = "com.kangmeng.zstyd"
-        caps["automationName"] = "xcuitest"
-        caps["deviceName"] = "iPhone 13"
-        caps["platformVersion"] = "15.0"
+        caps["platformName"] = "Android"
+        caps["platformVersion"] = "10.0"
+        caps["deviceName"] = "OCE-AN10"
+        caps["appPackage"] = "cn.dreamplus.wentangdoctor"
+        caps["appActivity"] = ".accout.startup.SplashActivity"
+        caps["resetKeyboard"] = True
         caps["noReset"] = True
         self.driver = webdriver.Remote("http://127.0.0.1:4723/wd/hub", caps)
 
